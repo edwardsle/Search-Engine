@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" href="img/favicon.png">
+<link href="css/style.css" rel="stylesheet">
+<title>99Lookup | Search Results</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+	integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Raleway|Roboto"
+	rel="stylesheet">
+
+</head>
+
+<body class="result">
+<div id="searchvue">
+	<div class="container">
+		<div class="row">
+			<a href=#>Images</a> <a href=#>News</a> <a href=#>Shopping</a> <a
+				href=#>Maps</a>
+		</div>
+		<div class="search-box">
+			<a href="index.html"><img src="img/99.png" style="width: 25%"></a>
+			<form id="searchthis" action="#" style="display: inline;" method="GET"
+				v-on:submit.prevent="handleSubmit">
+				<input id="namanyay-search-box" name="q" size="40" type="text"
+					placeholder="Type to search.." v-model="formData.keyword"/>
+				<button id="namanyay-search-btn" type="submit">
+					<i class="fas fa-search"></i>
+				</button>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div style="padding: 15px; background-color: #fefefe;">
+		<h2>Term search: {{keyword}}</h2>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>DocId</th>
+					<th>URL</th>
+					<th>Tf-idf score</th>
+					<th>Matched Keywords</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="result in results">
+					<td>{{result.docId}}</td>
+					<td><a v-bind:href="'http://' + result.url" target="_blank">{{result.url.substring(0,200)}}</a></td>
+					<td>{{result.score}}</td>
+					<td>{{result.matchedKeywords}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<footer class="footer">
+			<div class="container">
+				<p>
+					Search Engine By <a href="http://www.google.com/" target="_blank"><strong>Team
+							99</strong></a> | Copyright &copy;
+					<script>
+						document.write(new Date().getFullYear());
+					</script>
+					All rights reserved.
+				</p>
+			</div>
+		</footer>
+	<script
+		src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		var search = new Vue({
+		    el: '#searchvue',
+		    data : {
+		    	results : '',
+		    	formData : {
+		    		keyword : ''
+		    	}
+		    },
+		    methods : {
+		    	handleSubmit () {
+		    		axios
+			    	.get('api/search', {params : this.formData})
+			    	.then((response) => {
+			    		this.results = response.data;
+			    	});
+		    	}
+		    	
+		    }
+		})
+	</script>
+
+</body>
+</html>
